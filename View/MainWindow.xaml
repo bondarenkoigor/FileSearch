@@ -1,0 +1,92 @@
+﻿<Window x:Class="FileSearch.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileSearch"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:viewmodel="clr-namespace:FileSearch.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <Label Content="Поиск" FontSize="10" Padding="50,2,50,2"></Label>
+                <TextBox Text="{Binding FileSearchTextBox, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" Padding="0" Cursor="Arrow"></TextBox>
+            </StackPanel>
+            <Button VerticalAlignment="Top" Margin="5,0,0,0" Padding="0"   
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    Command="{Binding FileDialogCommand}">
+                <materialDesign:PackIcon Kind="FolderArrowUpOutline" Foreground="#FF86C003" />
+            </Button>
+            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
+                <Label Content="Фильтры" FontSize="10" Padding="50,2,50,2"></Label>
+                <TextBox Text="{Binding FilterTextBox, UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="ex:DOC;TXT;WAV;MP3" BorderThickness="1" Padding="0" Cursor="Arrow"></TextBox>
+            </StackPanel>
+            <ProgressBar VerticalAlignment="Top" Margin="20,15,0,0" Height="16" Width="210"
+                         Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}" 
+                         Visibility="{Binding ProgressBarVisibility, UpdateSourceTrigger=PropertyChanged}"
+                         Maximum="{Binding ProgressBarMaximum, UpdateSourceTrigger=PropertyChanged}" 
+                         BorderThickness="2"
+                         Foreground="#FF86C003" Background="White"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="25,40,0,0">
+            <TextBlock TextAlignment="Center" Text="Имя" Width="200"></TextBlock>
+            <TextBlock TextAlignment="Center" Text="Дата создания" Width="100"></TextBlock>
+            <TextBlock TextAlignment="Center" Text="Дата изменения" Margin="100,0,0,0"></TextBlock>
+        </StackPanel>
+        <ListBox Margin="0,60,0,0" ItemsSource="{Binding Files}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconSource}"  Width="25" Height="25"></Image>
+                        <Label Content="{Binding Name}" Width="200"></Label>
+                        <Label Content="{Binding CreationDate}" ContentStringFormat="d" Width="100"></Label>
+                        <Label Content="{Binding LastModifiedDate}" ContentStringFormat="d" Margin="100,0,0,0"></Label>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Column="1" Margin="0,60,0,0">
+            <Button VerticalAlignment="Top" 
+                    Command="{Binding ScanCommand, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsScanning, UpdateSourceTrigger=PropertyChanged}"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                Content="СКАНИРОВАТЬ" Cursor="Hand"/>
+
+            <Button Grid.Column="1" VerticalAlignment="Top" Command="{Binding StopCommand}"
+                Style="{StaticResource MaterialDesignPaperLightButton}"
+                ToolTip="Resource name: MaterialDesignPaperLightButton"
+                Content="СТОП"
+                Margin="0,15,0,0"/>
+
+            <Button Grid.Column="1" VerticalAlignment="Top" Command="{Binding DeleteCommand}"
+                    IsEnabled="{Binding IsPremiumActivated}"
+                Style="{StaticResource MaterialDesignPaperLightButton}"
+                ToolTip="Resource name: MaterialDesignPaperLightButton"
+                Content="УДАЛИТЬ"
+                Margin="0,15,0,0" Cursor="Hand"/>
+
+            <Button Grid.Column="1" VerticalAlignment="Top" Command="{Binding BuyCommand}"
+                Style="{StaticResource MaterialDesignPaperLightButton}"
+                ToolTip="Resource name: MaterialDesignPaperLightButton"
+                Content="ПЛАТНАЯ ВЕРСИЯ"
+                Margin="0,15,0,0" Cursor="Hand"/>
+        </StackPanel>
+
+
+    </Grid>
+</Window>
