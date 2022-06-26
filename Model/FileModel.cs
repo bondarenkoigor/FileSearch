@@ -44,7 +44,7 @@ namespace FileSearch.Model
             FileInfo info = new FileInfo(filepath);
             if (attr.HasFlag(FileAttributes.Directory))
             {
-                Icon = (Bitmap)Bitmap.FromFile("Resources\\folder.png");
+                Icon = (Bitmap)Bitmap.FromFile(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\Resources\\folder.png");
                 IsDirectory = true;
             }
             else
